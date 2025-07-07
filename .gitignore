@@ -29,3 +29,4 @@ __pycache__/
 # General build files (if any exist outside frontend/backend)
 dist/
 build/
+.idea/
