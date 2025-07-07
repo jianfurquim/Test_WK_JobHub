@@ -1,0 +1,31 @@
+# Environment files
+.env
+.env.*    # Allows .env.dev, .env.prod, etc.
+
+# Docker-generated files
+*.log
+*.pid
+*.sock
+docker-compose.override.yml
+volumes/
+tmp/
+__pycache__/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.swp
+
+# Python cache (outside of backend, if any scripts exist)
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# General build files (if any exist outside frontend/backend)
+dist/
+build/
