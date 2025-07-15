@@ -33,9 +33,7 @@ def register_view(request):
 @permission_classes([AllowAny])
 @csrf_exempt
 def login_view(request):
-    print("ENTROU NESSA VIEW")
     serializer = UserLoginSerializer(data=request.data, context={'request': request})
-    print(serializer.is_valid())
     if serializer.is_valid():
         user = serializer.validated_data['user']
         user_data = UserSerializer(user).data
