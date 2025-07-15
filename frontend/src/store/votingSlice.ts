@@ -57,8 +57,8 @@ export const openSession = createAsyncThunk(
 
 export const submitVote = createAsyncThunk(
   'voting/submitVote',
-  async ({ topicId, voto }: { topicId: string; voto: 'SIM' | 'NAO' }) => {
-    return await votingService.vote(topicId, voto);
+  async ({ topicId, vote }: { topicId: string; vote: 'YES' | 'NO' }) => {
+    return await votingService.vote(topicId, vote);
   }
 );
 

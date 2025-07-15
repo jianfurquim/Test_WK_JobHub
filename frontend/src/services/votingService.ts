@@ -17,10 +17,10 @@ export const openSession = async (topicId: string, duration?: number) => {
   });
 };
 
-export const vote = async (topicId: string, voto: 'SIM' | 'NAO') => {
+export const vote = async (topicId: string, vote: 'YES' | 'NO') => {
   return await apiRequest(`/topics/${topicId}/vote`, {
     method: 'POST',
-    body: JSON.stringify({ voto }),
+    body: JSON.stringify({ vote }),
   });
 };
 

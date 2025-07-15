@@ -17,7 +17,7 @@ const Vote: React.FC = () => {
   const { currentTopic, isLoading } = useSelector((state: RootState) => state.voting);
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const { toast } = useToast();
-  const [selectedVote, setSelectedVote] = useState<'SIM' | 'NAO' | null>(null);
+  const [selectedVote, setSelectedVote] = useState<'YES' | 'NO' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const Vote: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      await dispatch(submitVote({ topicId, voto: selectedVote })).unwrap();
+      await dispatch(submitVote({ topicId, vote: selectedVote })).unwrap();
       toast({
         title: "Sucesso",
         description: "Seu voto foi registrado com sucesso!",
@@ -128,11 +128,11 @@ const Vote: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Card 
                 className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
-                  selectedVote === 'SIM' 
-                    ? 'ring-2 ring-green-500 bg-green-50' 
+                  selectedVote === 'YES'
+                    ? 'ring-2 ring-green-500 bg-green-50'
                     : 'hover:bg-gray-50'
                 }`}
-                onClick={() => setSelectedVote('SIM')}
+                onClick={() => setSelectedVote('YES')}
               >
                 <CardContent className="flex items-center justify-center p-8">
                   <div className="text-center">
@@ -145,11 +145,11 @@ const Vote: React.FC = () => {
 
               <Card 
                 className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
-                  selectedVote === 'NAO' 
-                    ? 'ring-2 ring-red-500 bg-red-50' 
+                  selectedVote === 'NO'
+                    ? 'ring-2 ring-red-500 bg-red-50'
                     : 'hover:bg-gray-50'
                 }`}
-                onClick={() => setSelectedVote('NAO')}
+                onClick={() => setSelectedVote('NO')}
               >
                 <CardContent className="flex items-center justify-center p-8">
                   <div className="text-center">
