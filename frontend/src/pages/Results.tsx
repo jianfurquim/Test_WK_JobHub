@@ -14,11 +14,10 @@ const Results: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { currentTopic, voteResult, isLoading } = useSelector((state: RootState) => state.voting);
+  const { voteResult, isLoading } = useSelector((state: RootState) => state.voting);
 
   useEffect(() => {
     if (topicId) {
-      dispatch(fetchTopicById(topicId));
       dispatch(fetchVoteResult(topicId));
     }
 
@@ -35,7 +34,7 @@ const Results: React.FC = () => {
     );
   }
 
-  if (!currentTopic || !voteResult) {
+  if (!voteResult) {
     return (
       <div className="text-center">
         <p className="text-gray-500 text-lg">Resultados não encontrados</p>
@@ -46,8 +45,9 @@ const Results: React.FC = () => {
     );
   }
 
-  const percentSim = voteResult.total > 0 ? (voteResult.votosSim / voteResult.total) * 100 : 0;
-  const percentNao = voteResult.total > 0 ? (voteResult.votosNao / voteResult.total) * 100 : 0;
+  const percentSim = voteResult.total_votes > 0 ? (voteResult.yes_votes / voteResult.total_votes) * 100 : 0;
+  const percentNao = voteResult.total_votes > 0 ? (voteResult.no_votes / voteResult.total_votes) * 100 : 0;
+  const statusLabel = voteResult.topic_status === 'CLOSED' ? 'Votação Encerrada' : 'Votação Aberta';
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -63,33 +63,23 @@ const Results: React.FC = () => {
       <Card>
         <CardHeader>
           <div className="flex justify-between items-start mb-2">
-            <CardTitle className="text-2xl">{currentTopic.titulo}</CardTitle>
+            <CardTitle className="text-2xl">{voteResult.topic_title}</CardTitle>
             <Badge variant="outline" className="flex items-center space-x-1">
               <BarChart3 className="h-3 w-3" />
-              <span>Votação Encerrada</span>
+              <span>{statusLabel}</span>
             </Badge>
           </div>
           <CardDescription className="text-base">
-            {currentTopic.descricao}
+            {voteResult.topic_description}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {currentTopic.dataInicio && currentTopic.dataFim && (
-            <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
-              <p className="text-sm text-gray-600">
-                <strong>Período de votação:</strong>{' '}
-                {new Date(currentTopic.dataInicio).toLocaleString('pt-BR')} até{' '}
-                {new Date(currentTopic.dataFim).toLocaleString('pt-BR')}
-              </p>
-            </div>
-          )}
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="bg-blue-50 border-blue-200">
               <CardContent className="flex items-center p-6">
                 <Users className="h-8 w-8 text-blue-600 mr-3" />
                 <div>
-                  <p className="text-2xl font-bold text-blue-700">{voteResult.total}</p>
+                  <p className="text-2xl font-bold text-blue-700">{voteResult.total_votes}</p>
                   <p className="text-sm text-blue-600">Total de Votos</p>
                 </div>
               </CardContent>
@@ -99,7 +89,7 @@ const Results: React.FC = () => {
               <CardContent className="flex items-center p-6">
                 <ThumbsUp className="h-8 w-8 text-green-600 mr-3" />
                 <div>
-                  <p className="text-2xl font-bold text-green-700">{voteResult.votosSim}</p>
+                  <p className="text-2xl font-bold text-green-700">{voteResult.yes_votes}</p>
                   <p className="text-sm text-green-600">Votos SIM</p>
                 </div>
               </CardContent>
@@ -109,7 +99,7 @@ const Results: React.FC = () => {
               <CardContent className="flex items-center p-6">
                 <ThumbsDown className="h-8 w-8 text-red-600 mr-3" />
                 <div>
-                  <p className="text-2xl font-bold text-red-700">{voteResult.votosNao}</p>
+                  <p className="text-2xl font-bold text-red-700">{voteResult.no_votes}</p>
                   <p className="text-sm text-red-600">Votos NÃO</p>
                 </div>
               </CardContent>
@@ -124,7 +114,7 @@ const Results: React.FC = () => {
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium text-green-700">SIM</span>
                   <span className="text-sm text-gray-600">
-                    {voteResult.votosSim} votos ({percentSim.toFixed(1)}%)
+                    {voteResult.yes_votes} votos ({percentSim.toFixed(1)}%)
                   </span>
                 </div>
                 <Progress value={percentSim} className="h-3 bg-gray-200">
@@ -139,7 +129,7 @@ const Results: React.FC = () => {
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium text-red-700">NÃO</span>
                   <span className="text-sm text-gray-600">
-                    {voteResult.votosNao} votos ({percentNao.toFixed(1)}%)
+                    {voteResult.no_votes} votos ({percentNao.toFixed(1)}%)
                   </span>
                 </div>
                 <Progress value={percentNao} className="h-3 bg-gray-200">
@@ -152,14 +142,14 @@ const Results: React.FC = () => {
             </div>
           </div>
 
-          {voteResult.total > 0 && (
+          {voteResult.total_votes > 0 && (
             <Card className="bg-gray-50">
               <CardContent className="p-6">
                 <h4 className="font-semibold mb-2">Resultado Final:</h4>
                 <p className="text-lg">
-                  {voteResult.votosSim > voteResult.votosNao ? (
+                  {voteResult.yes_votes > voteResult.no_votes ? (
                     <span className="text-green-700 font-bold">✓ Proposta APROVADA</span>
-                  ) : voteResult.votosNao > voteResult.votosSim ? (
+                  ) : voteResult.no_votes > voteResult.yes_votes ? (
                     <span className="text-red-700 font-bold">✗ Proposta REJEITADA</span>
                   ) : (
                     <span className="text-gray-700 font-bold">⚖️ EMPATE</span>
