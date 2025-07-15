@@ -4,7 +4,7 @@ import * as authService from '../services/authService';
 
 interface User {
   id: string;
-  nome: string;
+  name: string;
   cpf: string;
 }
 
@@ -26,7 +26,7 @@ const initialState: AuthState = {
 
 export const loginUser = createAsyncThunk(
   'auth/login',
-  async (credentials: { cpf: string; senha: string }) => {
+  async (credentials: { cpf: string; password: string }) => {
     const response = await authService.login(credentials);
     localStorage.setItem('token', response.token);
     return response;
@@ -35,7 +35,7 @@ export const loginUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   'auth/register',
-  async (userData: { nome: string; cpf: string; senha: string }) => {
+  async (userData: { name: string; cpf: string; password: string }) => {
     const response = await authService.register(userData);
     return response;
   }

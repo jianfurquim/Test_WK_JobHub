@@ -36,7 +36,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="flex items-center space-x-4">
               {isAuthenticated ? (
                 <>
-                  <span className="text-gray-700">Olá, {user?.nome}</span>
+                  <span className="text-gray-700">Olá, {user?.name}</span>
                   <Button
                     onClick={handleLogout}
                     variant="outline"

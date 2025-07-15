@@ -11,10 +11,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { useToast } from '../hooks/use-toast';
 
 const Register: React.FC = () => {
-  const [nome, setNome] = useState('');
+  const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
-  const [senha, setSenha] = useState('');
-  const [confirmSenha, setConfirmSenha] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!nome || !cpf || !senha || !confirmSenha) {
+    if (!name || !cpf || !password || !confirmPassword) {
       toast({
         title: "Erro",
         description: "Por favor, preencha todos os campos",
@@ -44,7 +44,7 @@ const Register: React.FC = () => {
       return;
     }
 
-    if (senha !== confirmSenha) {
+    if (password !== confirmPassword) {
       toast({
         title: "Erro",
         description: "As senhas não coincidem",
@@ -53,7 +53,7 @@ const Register: React.FC = () => {
       return;
     }
 
-    if (senha.length < 6) {
+    if (password.length < 6) {
       toast({
         title: "Erro",
         description: "A senha deve ter pelo menos 6 caracteres",
@@ -63,7 +63,7 @@ const Register: React.FC = () => {
     }
 
     try {
-      await dispatch(registerUser({ nome, cpf: cpf.replace(/\D/g, ''), senha })).unwrap();
+      await dispatch(registerUser({ name, cpf: cpf.replace(/\D/g, ''), password })).unwrap();
       toast({
         title: "Sucesso",
         description: "Usuário registrado com sucesso! Faça login para continuar.",
@@ -97,13 +97,13 @@ const Register: React.FC = () => {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="nome">Nome Completo</Label>
+              <Label htmlFor="name">Nome Completo</Label>
               <Input
-                id="nome"
+                id="name"
                 type="text"
                 placeholder="Digite seu nome completo"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 required
               />
             </div>
@@ -122,26 +122,26 @@ const Register: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="senha">Senha</Label>
+              <Label htmlFor="password">Senha</Label>
               <Input
-                id="senha"
+                id="password"
                 type="password"
                 placeholder="Digite sua senha (min. 6 caracteres)"
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 minLength={6}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmSenha">Confirmar Senha</Label>
+              <Label htmlFor="confirmPassword">Confirmar Senha</Label>
               <Input
-                id="confirmSenha"
+                id="confirmPassword"
                 type="password"
                 placeholder="Confirme sua senha"
-                value={confirmSenha}
-                onChange={(e) => setConfirmSenha(e.target.value)}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
             </div>
