@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'users',
     'topics',
     'votes',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
