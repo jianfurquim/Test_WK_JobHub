@@ -27,3 +27,10 @@ export const vote = async (topicId: string, voto: 'SIM' | 'NAO') => {
 export const getResult = async (topicId: string) => {
   return await apiRequest(`/topics/${topicId}/result`);
 };
+
+export const createTopic = async (title: string, description: string) => {
+  return await apiRequest('/topics', {
+    method: 'POST',
+    body: JSON.stringify({ title, description }),
+  });
+};

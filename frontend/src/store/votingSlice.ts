@@ -69,6 +69,13 @@ export const fetchVoteResult = createAsyncThunk(
   }
 );
 
+export const createTopic = createAsyncThunk(
+  'voting/createTopic',
+  async ({ title, description }: { title: string; description: string }) => {
+    return await votingService.createTopic(title, description);
+  }
+);
+
 const votingSlice = createSlice({
   name: 'voting',
   initialState,
@@ -111,6 +118,9 @@ const votingSlice = createSlice({
       })
       .addCase(fetchVoteResult.fulfilled, (state, action) => {
         state.voteResult = action.payload;
+      })
+      .addCase(createTopic.fulfilled, (state, action) => {
+        state.topics.push(action.payload);
       });
   },
 });
