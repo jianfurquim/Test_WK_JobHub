@@ -6,49 +6,56 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer
 
-@api_view(['POST'])
+
+@api_view(["POST"])
 @permission_classes([AllowAny])
 def register_view(request):
     serializer = UserRegistrationSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
         user_data = UserSerializer(user).data
-        
+
         # Generate JWT tokens
         refresh = RefreshToken.for_user(user)
-        
-        return Response({
-            'message': 'Usuário cadastrado com sucesso!',
-            'user': user_data,
-            'token': str(refresh.access_token),
-            'refresh': str(refresh)
-        }, status=status.HTTP_201_CREATED)
-    
-    return Response({
-        'error': 'Erro no cadastro',
-        'details': serializer.errors
-    }, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
+        return Response(
+            {
+                "message": "Usuário cadastrado com sucesso!",
+                "user": user_data,
+                "token": str(refresh.access_token),
+                "refresh": str(refresh),
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+    return Response(
+        {"error": "Erro no cadastro", "details": serializer.errors},
+        status=status.HTTP_400_BAD_REQUEST,
+    )
+
+
+@api_view(["POST"])
 @permission_classes([AllowAny])
 @csrf_exempt
 def login_view(request):
-    serializer = UserLoginSerializer(data=request.data, context={'request': request})
+    serializer = UserLoginSerializer(data=request.data, context={"request": request})
     if serializer.is_valid():
-        user = serializer.validated_data['user']
+        user = serializer.validated_data["user"]
         user_data = UserSerializer(user).data
-        
+
         # Generate JWT tokens
         refresh = RefreshToken.for_user(user)
-        
-        return Response({
-            'message': 'Login realizado com sucesso!',
-            'user': user_data,
-            'token': str(refresh.access_token),
-            'refresh': str(refresh)
-        })
-    
-    return Response({
-        'error': 'Erro no login',
-        'details': serializer.errors
-    }, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(
+            {
+                "message": "Login realizado com sucesso!",
+                "user": user_data,
+                "token": str(refresh.access_token),
+                "refresh": str(refresh),
+            }
+        )
+
+    return Response(
+        {"error": "Erro no login", "details": serializer.errors},
+        status=status.HTTP_400_BAD_REQUEST,
+    )
